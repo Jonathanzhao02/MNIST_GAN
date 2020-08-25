@@ -1,7 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.layers import Conv2D, Flatten, Dense, Dropout, Conv2DTranspose, LeakyReLU, GlobalMaxPooling2D, Reshape
 import numpy as np
-from PIL import Image, ImageDraw
 import os
 import sys
 import logging
