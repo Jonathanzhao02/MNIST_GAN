@@ -1,5 +1,3 @@
-#!/Users/mac/.pyenv/versions/ml/bin/python
-
 import tensorflow as tf
 from tensorflow.keras.layers import Conv2D, Flatten, Dense, Dropout, Conv2DTranspose, LeakyReLU, GlobalMaxPooling2D, Reshape
 import numpy as np
