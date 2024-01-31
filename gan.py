@@ -1,5 +1,5 @@
 import tensorflow as tf
-from tensorflow.keras.layers import Conv2D, Flatten, Dense, Dropout, Conv2DTranspose, LeakyReLU, GlobalMaxPooling2D, Reshape
+from tensorflow.keras.layers import Conv2D, Dense, Conv2DTranspose, LeakyReLU, GlobalMaxPooling2D, Reshape
 import numpy as np
 import os
 import sys
@@ -9,6 +9,7 @@ tf.get_logger().setLevel(logging.FATAL)
 latent_dim = 128
 batch_size = 700
 epochs = 100
+start = 0
 sample_vector = tf.random.normal(shape=(1, latent_dim))
 
 """28x28"""
@@ -66,9 +67,11 @@ gen = Generator()
 discrim.build((None, 28, 28, 1))
 gen.build((None, latent_dim))
 
-if (len(sys.argv) == 3):
+if (len(sys.argv) >= 3):
     discrim.load_weights(sys.argv[1])
     gen.load_weights(sys.argv[2])
+    if (len(sys.argv) >= 4):
+        start = int(sys.argv[3])
 loss = tf.keras.losses.BinaryCrossentropy(from_logits=True)
 d_optimizer = tf.keras.optimizers.Adam(0.0003)
 g_optimizer = tf.keras.optimizers.Adam(0.0004)
@@ -100,12 +103,12 @@ def train_step (x_real):
     g_optimizer.apply_gradients(zip(grads, gen.trainable_weights))
     return d_loss, g_loss, gen(sample_vector)[0]
 
-for epoch in range(epochs):
+for epoch in range(start, epochs):
     print('Start', epoch)
 
     for step, x_real in enumerate(dataset):
+        print('On Step', step)
         d_loss, g_loss, imgs = train_step(x_real)
-        print('Step', step)
 
         if step % 10 == 0:
             print('Discriminator loss:', float(d_loss))
